@@ -122,7 +122,7 @@ GLint glt::load_texture_2d_array(const std::vector<std::string> &files, int *wid
 	}
 	return tex;
 }
-GLint load_cubemap(const std::vector<std::string> &files, int *width, int *height){
+GLint glt::load_cubemap(const std::vector<std::string> &files, int *width, int *height){
 	assert(files.size() == 6);
 	int x, y, n;
 	std::vector<unsigned char*> images;
