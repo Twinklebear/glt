@@ -127,7 +127,13 @@ GLint glt::load_cubemap(const std::vector<std::string> &files, int *width, int *
 	int x, y, n;
 	std::vector<unsigned char*> images;
 	//We need to load the first image to get the dimensions and format we're loading
-	images.push_back(stbi_load(files.front().c_str(), &x, &y, &n, 0));
+	unsigned char *im = stbi_load(files.front().c_str(), &x, &y, &n, 0);
+	if (!im){
+		std::cout << "load_cubemap error loading " << files.front()
+			<< " - " << stbi_failure_reason() << std::endl;
+		return -1;
+	}
+	images.push_back(im);
 	for (const auto &f : files){
 		int ix, iy, in;
 		unsigned char *im = stbi_load(f.c_str(), &ix, &iy, &in, 0);
