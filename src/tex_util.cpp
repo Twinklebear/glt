@@ -58,18 +58,18 @@ GLint glt::load_texture_2d_array(const std::vector<std::string> &files, int *wid
 	std::vector<unsigned char*> images;
 	//We need to load the first image to get the dimensions and format we're loading
 	images.push_back(stbi_load(files.front().c_str(), &x, &y, &n, 0));
-	for (const auto &f : files){
+	for (auto f = ++files.begin(); f != files.end(); ++f){
 		int ix, iy, in;
-		unsigned char *im = stbi_load(f.c_str(), &ix, &iy, &in, 0);
+		unsigned char *im = stbi_load(f->c_str(), &ix, &iy, &in, 0);
 		bool error = false;
 		if (!im){
-			std::cout << "load_texture_2d_array error loading " << f
+			std::cout << "load_texture_2d_array error loading " << *f
 				<< " - " << stbi_failure_reason() << std::endl;
 			error = true;
 		}
 		if (x != ix || y != iy || n != in){
 			std::cout << "load_texture_2d_array error: incompatible file types found on "
-				<< f << std::endl;
+				<< *f << std::endl;
 			error = true;
 		}
 		if (error){
@@ -134,18 +134,18 @@ GLint glt::load_cubemap(const std::vector<std::string> &files, int *width, int *
 		return -1;
 	}
 	images.push_back(im);
-	for (const auto &f : files){
+	for (auto f = ++files.begin(); f != files.end(); ++f){
 		int ix, iy, in;
-		unsigned char *im = stbi_load(f.c_str(), &ix, &iy, &in, 0);
+		unsigned char *im = stbi_load(f->c_str(), &ix, &iy, &in, 0);
 		bool error = false;
 		if (!im){
-			std::cout << "load_cubemap error loading " << f
+			std::cout << "load_cubemap error loading " << *f
 				<< " - " << stbi_failure_reason() << std::endl;
 			error = true;
 		}
 		if (x != ix || y != iy || n != in){
 			std::cout << "load_cubemap error: incompatible file types found on "
-				<< f << std::endl;
+				<< *f << std::endl;
 			error = true;
 		}
 		if (error){
@@ -163,11 +163,13 @@ GLint glt::load_cubemap(const std::vector<std::string> &files, int *width, int *
 		*height = y;
 	}
 	//Perform y-swap on each loaded image
+	/*
 	for (auto img : images){
 		for (int i = 0; i < y / 2; ++i){
 			swap_row(&img[i * x * n], &img[(y - i - 1) * x * n], x * n);
 		}
 	}
+	*/
 	GLenum format;
 	switch (n){
 		case 1:
