@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include <iomanip>
 #include <SDL.h>
 #include "glt/gl_core_4_5.h"
@@ -8,7 +9,7 @@ using namespace glt::dbg;
 
 void glt::dbg::register_debug_callback(){
 	if (ogl_IsVersionGEQ(4, 3)){
-		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(debug_callback, nullptr);
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
 	}
@@ -87,5 +88,9 @@ void glt::dbg::log_debug_msg(GLenum src, GLenum type, GLuint, GLenum severity, G
 		std::cout << " Other";
 	}
 	std::cout << ":\n\t" << msg << "\n";
+	// Break for a stack trace of sorts
+	if (severity == GL_DEBUG_SEVERITY_HIGH_ARB && type == GL_DEBUG_TYPE_ERROR_ARB){
+		assert(false);
+	}
 }
 
