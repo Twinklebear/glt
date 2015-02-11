@@ -184,8 +184,8 @@ GLint glt::load_cubemap(const std::vector<std::string> &files, int *width, int *
 	for (size_t i = 0; i < images.size(); ++i){
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, x, y, 0, format,
 				GL_UNSIGNED_BYTE, images[i]);
-		glGenerateMipmap(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
 	}
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 	//Clean up all the image data
 	for (auto i : images){
 		stbi_image_free(i);
