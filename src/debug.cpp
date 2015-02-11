@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <SDL.h>
-#include "gl_core_4_5.h"
+#include "glt/gl_core_4_5.h"
 #include "glt/debug.h"
 
 using namespace glt::dbg;

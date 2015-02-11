@@ -4,7 +4,7 @@
 #include <cassert>
 #include <iostream>
 #include <iterator>
-#include "gl_core_4_5.h"
+#include "glt/gl_core_4_5.h"
 #include "glt/buffer_allocator.h"
 
 using namespace glt;

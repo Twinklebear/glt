@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 #include <SDL.h>
-#include "gl_core_4_5.h"
+#include "glt/gl_core_4_5.h"
 #include "glt/util.h"
 
 std::string glt::get_resource_path(const std::string &sub_dir){
