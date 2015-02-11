@@ -23,6 +23,6 @@ add_definitions(-DGLM_FORCE_RADIANS)
 find_package(SDL2 REQUIRED)
 find_package(GLM REQUIRED)
 
-include_directories(include ${SDL2_INCLUDE_DIR} ${GLM_INCLUDE_DIRS})
+include_directories(include external ${SDL2_INCLUDE_DIR} ${GLM_INCLUDE_DIRS})
 add_subdirectory(src)
 
