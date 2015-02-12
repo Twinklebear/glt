@@ -89,8 +89,6 @@ void glt::dbg::log_debug_msg(GLenum src, GLenum type, GLuint, GLenum severity, G
 	}
 	std::cout << ":\n\t" << msg << "\n";
 	// Break for a stack trace of sorts
-	if (severity == GL_DEBUG_SEVERITY_HIGH_ARB && type == GL_DEBUG_TYPE_ERROR_ARB){
-		assert(false);
-	}
+	assert(severity != GL_DEBUG_SEVERITY_HIGH_ARB && type != GL_DEBUG_TYPE_ERROR_ARB);
 }
 
