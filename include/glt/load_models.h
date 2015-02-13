@@ -23,8 +23,8 @@ struct ModelInfo {
  * Load all objects contained in the list of obj files using the buffer allocator
  * to allocate sub buffers `vert_buf` and `elem_buf` to store all the model information
  * elements will be stored as GLuints
- * vertex attribs are stored as interleaved vec3s in the order: pos, normal
- * TODO: texcoords when we start doing texturing
+ * vertex attribs are stored as interleaved vec3s in the order: pos, normal, texcoord
+ * If a model doesn't have texcoords the texcoords will just be junk values
  * returns true if all models loaded successfully, false if not
  */
 bool load_models(const std::vector<std::string> &model_files, SubBuffer &vert_buf,
