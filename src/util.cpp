@@ -51,7 +51,8 @@ std::string glt::load_shader_file(const std::string &fname, std::vector<std::str
 	// before inserting the included file contents
 	size_t inc = content.rfind("#include");
 	if (inc != std::string::npos){
-		size_t line_no = std::count_if(content.begin(), content.begin() + inc, [](const char &c){ return c == '\n'; });
+		size_t line_no = std::count_if(content.begin(), content.begin() + inc,
+				[](const char &c){ return c == '\n'; });
 		content.insert(content.find("\n", inc) + 1, "#line " + std::to_string(line_no + 2)
 				+ " " + std::to_string(file_names.size() - 1) + "\n");
 	}
@@ -75,10 +76,13 @@ std::string glt::load_shader_file(const std::string &fname, std::vector<std::str
 // Extract the file number the error occured in from the log message
 // it's expected that the message begins with file_no(line_no)
 // TODO: Is this always the form of the compilation errors?
+// TODO it's not always the form of the compilation errors, need to
+// handle intel and possible AMD differences properly
 int get_file_num(const std::vector<char> &log){
 	auto paren = std::find(log.begin(), log.end(), '(');
 	std::string file_no{log.begin(), paren};
-	return std::stoi(file_no);
+	//return std::stoi(file_no);
+	return 0;
 }
 GLint glt::load_shader(GLenum type, const std::string &file){
 	GLuint shader = glCreateShader(type);
