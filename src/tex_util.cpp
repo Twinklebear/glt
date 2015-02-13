@@ -162,14 +162,12 @@ GLint glt::load_cubemap(const std::vector<std::string> &files, int *width, int *
 	if (height){
 		*height = y;
 	}
-	//Perform y-swap on each loaded image
-	/*
+	// Perform y-swap on each loaded image
 	for (auto img : images){
 		for (int i = 0; i < y / 2; ++i){
 			swap_row(&img[i * x * n], &img[(y - i - 1) * x * n], x * n);
 		}
 	}
-	*/
 	GLenum format;
 	switch (n){
 		case 1:
