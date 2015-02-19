@@ -16,6 +16,10 @@ const char PATH_SEP = '/';
 inline float to_radians(float deg){
 	return deg * 0.01745f;
 }
+template<typename T>
+constexpr inline T clamp(T x, T l, T h){
+	return x < l ? l : x > h ? h : x;
+}
 // Get the resource path for resources located under res/<sub_dir>
 // sub_dir defaults to empty to just return res
 std::string get_resource_path(const std::string &sub_dir = "");
