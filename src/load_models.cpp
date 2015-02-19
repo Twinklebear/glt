@@ -42,18 +42,18 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 	}
 
 	// We store 6 floats per element at the moment
-	// Format is vec3 (pos), vec3 (normal), vec3 (texcoord)
-	vert_buf = allocator.alloc(total_elems * 9 * sizeof(float));
+	// Format is vec3 (pos), vec3 (normal), vec2 (texcoord)
+	vert_buf = allocator.alloc(total_elems * 8 * sizeof(float));
 	{
 		float *verts = static_cast<float*>(vert_buf.map(GL_ARRAY_BUFFER,
 					GL_MAP_INVALIDATE_RANGE_BIT | GL_MAP_WRITE_BIT));
 		// Track our offset in the vertex buffer
 		size_t i = 0;
 		for (const auto &s : loaded_models){
-			elem_offsets[s.name].vert_offset = i / 9;
+			elem_offsets[s.name].vert_offset = i / 8;
 			for (auto p = s.mesh.positions.begin(), n = s.mesh.normals.begin(), t = s.mesh.texcoords.begin();
 					p != s.mesh.positions.end() && n != s.mesh.normals.end();
-					i += 9)
+					i += 8)
 			{
 				for (int k = 0; k < 3; ++k, ++p){
 					verts[i + k] = *p;
@@ -63,7 +63,7 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 				}
 				// Some models may not have/need texcoords
 				if (t != s.mesh.texcoords.end()){
-					for (int k = 6; k < 9; ++k, ++t){
+					for (int k = 6; k < 8; ++k, ++t){
 						verts[i + k] = *t;
 					}
 				}
