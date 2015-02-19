@@ -62,7 +62,7 @@ void glt::ArcBallCamera::rotate(const SDL_MouseMotionEvent &mouse, float elapsed
 void glt::ArcBallCamera::pan(const SDL_MouseMotionEvent &mouse, float elapsed){
 	glm::vec3 motion{0.f};
 	if (SDL_GetModState() & KMOD_SHIFT){
-		motion.z = -mouse.yrel * inv_screen[1];
+		motion.z = -mouse.yrel * inv_screen[1] * 2;
 	}
 	else {
 		motion.x = mouse.xrel * inv_screen[0];
