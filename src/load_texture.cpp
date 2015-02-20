@@ -3,7 +3,7 @@
 #include <cassert>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "glt/tex_util.h"
+#include "glt/load_texture.h"
 
 //Swap rows of n bytes pointed to by a with those pointed to by b
 //for use in doing the y-flip for images so OpenGL has them right-side up
