@@ -37,7 +37,7 @@ GLint glt::load_texture_2d(const std::string &file, int *width, int *height){
 		case 3:
 			format = GL_RGB;
 			break;
-		case 4:
+		default:
 			format = GL_RGBA;
 			break;
 	}
@@ -103,7 +103,7 @@ GLint glt::load_texture_2d_array(const std::vector<std::string> &files, int *wid
 		case 3:
 			format = GL_RGB;
 			break;
-		case 4:
+		default:
 			format = GL_RGBA;
 			break;
 	}
@@ -179,7 +179,7 @@ GLint glt::load_cubemap(const std::vector<std::string> &files, int *width, int *
 		case 3:
 			format = GL_RGB;
 			break;
-		case 4:
+		default:
 			format = GL_RGBA;
 			break;
 	}
