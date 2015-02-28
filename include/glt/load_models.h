@@ -4,10 +4,10 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
-#include <tinyobjloader/tiny_obj_loader.h>
+#include <tiny_obj_loader.h>
 #include "buffer_allocator.h"
 
-namespace glt{
+namespace glt {
 /*
  * Stores information about the offsets for some loaded model
  * index_offset: offset in number of indices to the indices for this model
