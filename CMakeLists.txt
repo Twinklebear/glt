@@ -11,7 +11,7 @@ file(DOWNLOAD "https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
 	"${stb_image_INCLUDE_DIR}/stb_image.h")
 set(tinyobj_DIR "${EXTERNAL}/tinyobjloader/")
 file(DOWNLOAD "https://raw.githubusercontent.com/syoyo/tinyobjloader/master/tiny_obj_loader.h"
-	"${tinyobj_DIR}/include/tinyobjloader/tiny_obj_loader.h")
+	"${tinyobj_DIR}/include/tiny_obj_loader.h")
 file(DOWNLOAD "https://raw.githubusercontent.com/syoyo/tinyobjloader/master/tiny_obj_loader.cc"
 	"${tinyobj_DIR}/src/tiny_obj_loader.cc")
 set(tinyobj_SRC "${tinyobj_DIR}/src/tiny_obj_loader.cc")
