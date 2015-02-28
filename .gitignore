@@ -5,6 +5,7 @@
 *.dll
 build/
 bin/
+external/
 
 # ignore my ycm files
 .ycm_extra_conf.py
