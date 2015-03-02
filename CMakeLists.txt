@@ -9,7 +9,7 @@ set(EXTERNAL "${GLT_SOURCE_DIR}/external")
 set(stb_image_INCLUDE_DIR "${EXTERNAL}/stb_image/")
 file(DOWNLOAD "https://raw.githubusercontent.com/nothings/stb/master/stb_image.h"
 	"${stb_image_INCLUDE_DIR}/stb_image.h")
-set(tinyobj_DIR "${EXTERNAL}/tinyobjloader/")
+set(tinyobj_DIR "${EXTERNAL}/tinyobjloader")
 file(DOWNLOAD "https://raw.githubusercontent.com/syoyo/tinyobjloader/master/tiny_obj_loader.h"
 	"${tinyobj_DIR}/include/tiny_obj_loader.h")
 file(DOWNLOAD "https://raw.githubusercontent.com/syoyo/tinyobjloader/master/tiny_obj_loader.cc"
