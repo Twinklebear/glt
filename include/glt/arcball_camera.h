@@ -40,9 +40,13 @@ public:
 	/*
 	 * Handle mouse motion events to move the camera
 	 * returns true if the camera has moved
-	 * TODO: Take time step here
 	 */
 	bool mouse_motion(const SDL_MouseMotionEvent &mouse, float elapsed);
+	/*
+	 * Handle mouse scroll events to zoom in/out
+	 * returns true if the camera has moved
+	 */
+	bool mouse_scroll(const SDL_MouseWheelEvent &scroll, float elapsed);
 	/*
 	 * Handle keyboard events to reset the camera
 	 * returns true if the camera has moved

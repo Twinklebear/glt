@@ -19,6 +19,17 @@ bool glt::ArcBallCamera::mouse_motion(const SDL_MouseMotionEvent &mouse, float e
 	}
 	return false;
 }
+bool glt::ArcBallCamera::mouse_scroll(const SDL_MouseWheelEvent &scroll, float elapsed){
+	if (scroll.y != 0){
+		glm::vec3 motion{0.f};
+		motion.z = scroll.y * 0.35;
+		translation = glm::translate(motion * motion_speed * elapsed) * translation;
+		camera = translation * look_at * glm::mat4_cast(rotation);
+		inv_camera = glm::inverse(camera);
+		return true;
+	}
+	return false;
+}
 bool glt::ArcBallCamera::keypress(const SDL_KeyboardEvent &key){
 	if (key.keysym.sym == SDLK_r){
 		translation = glm::mat4{};
