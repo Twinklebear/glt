@@ -2,6 +2,7 @@
 #define GLT_LOAD_MODELS_H
 
 #include <unordered_map>
+#include <ostream>
 #include <string>
 #include <vector>
 #include <tiny_obj_loader.h>
@@ -32,6 +33,7 @@ bool load_models(const std::vector<std::string> &model_files, SubBuffer &vert_bu
 		SubBuffer &elem_buf, BufferAllocator &allocator,
 		std::unordered_map<std::string, ModelInfo> &elem_offsets);
 }
+std::ostream& operator<<(std::ostream &os, const glt::ModelInfo &m);
 
 #endif
 

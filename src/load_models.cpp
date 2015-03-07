@@ -20,6 +20,10 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 			std::cout << "Failed to load model " << file << " error: " << err << std::endl;
 			return false;
 		}
+		std::cout << "loaded " << shapes.size() << " model(s) from " << file << ", names:\n";
+		for (const auto &s : shapes){
+			std::cout << s.name << "\n";
+		}
 		std::copy(shapes.begin(), shapes.end(), std::back_inserter(loaded_models));
 	}
 
@@ -72,5 +76,13 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 		vert_buf.unmap(GL_ARRAY_BUFFER);
 	}
 	return true;
+}
+std::ostream& operator<<(std::ostream &os, const glt::ModelInfo &m){
+	os << "glt::ModelInfo:"
+		<< "\n\tindex_offset: " << m.index_offset
+		<< "\n\tindices: " << m.indices
+		<< "\n\tvert_offset: " << m.vert_offset
+		<< "\n--------\n";
+	return os;
 }
 
