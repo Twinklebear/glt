@@ -20,9 +20,9 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 			std::cout << "Failed to load model " << file << " error: " << err << std::endl;
 			return false;
 		}
-		std::cout << "loaded " << shapes.size() << " model(s) from " << file << ", names:\n";
+		std::cout << "loaded " << shapes.size() << " model(s) from " << file << ", name(s):\n";
 		for (const auto &s : shapes){
-			std::cout << s.name << "\n";
+			std::cout << "\t" << s.name << "\n";
 		}
 		std::copy(shapes.begin(), shapes.end(), std::back_inserter(loaded_models));
 	}
