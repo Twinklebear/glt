@@ -56,14 +56,16 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 		for (const auto &s : loaded_models){
 			elem_offsets[s.name].vert_offset = i / 8;
 			for (auto p = s.mesh.positions.begin(), n = s.mesh.normals.begin(), t = s.mesh.texcoords.begin();
-					p != s.mesh.positions.end() && n != s.mesh.normals.end();
+					p != s.mesh.positions.end();
 					i += 8)
 			{
 				for (int k = 0; k < 3; ++k, ++p){
 					verts[i + k] = *p;
 				}
-				for (int k = 3; k < 6; ++k, ++n){
-					verts[i + k] = *n;
+				if (n != s.mesh.normals.end()){
+					for (int k = 3; k < 6; ++k, ++n){
+						verts[i + k] = *n;
+					}
 				}
 				// Some models may not have/need texcoords
 				if (t != s.mesh.texcoords.end()){
