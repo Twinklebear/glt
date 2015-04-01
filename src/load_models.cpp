@@ -28,7 +28,13 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 		}
 		std::cout << "loaded " << shapes.size() << " model(s) from " << file << ", name(s):\n";
 		for (const auto &s : shapes){
-			std::cout << "\t" << s.name << "\n";
+			std::cout << "\t" << s.name;
+			if (!materials.empty()){
+				std::cout << ", uses material: " << materials[s.mesh.material_ids[0]].name << "\n";
+			}
+			else {
+				std::cout << "\n";
+			}
 		}
 		std::cout << "loaded " << materials.size() << " material(s):\n";
 		for (const auto &m : materials){
