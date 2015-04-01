@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <numeric>
+#include "glt/util.h"
 #include "glt/load_models.h"
 
 glt::ModelInfo::ModelInfo(size_t index_offset, size_t indices, size_t vert_offset)
@@ -15,7 +16,12 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 	for (const auto &file : model_files){
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
-		std::string err = tinyobj::LoadObj(shapes, materials, file.c_str());
+		std::string base_path;
+		const auto base_path_end = file.rfind(PATH_SEP);
+		if (base_path_end != std::string::npos){
+			base_path = file.substr(0, base_path_end + 1);
+		}
+		std::string err = tinyobj::LoadObj(shapes, materials, file.c_str(), base_path.c_str());
 		if (!err.empty()){
 			std::cout << "Failed to load model " << file << " error: " << err << std::endl;
 			return false;
@@ -23,6 +29,10 @@ bool glt::load_models(const std::vector<std::string> &model_files, SubBuffer &ve
 		std::cout << "loaded " << shapes.size() << " model(s) from " << file << ", name(s):\n";
 		for (const auto &s : shapes){
 			std::cout << "\t" << s.name << "\n";
+		}
+		std::cout << "loaded " << materials.size() << " material(s):\n";
+		for (const auto &m : materials){
+			std::cout << "\t" << m.name << "\n";
 		}
 		std::copy(shapes.begin(), shapes.end(), std::back_inserter(loaded_models));
 	}
