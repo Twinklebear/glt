@@ -1,5 +1,7 @@
 #include <iostream>
+#include <cmath>
 #include <utility>
+#include <map>
 #include <cassert>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -197,5 +199,103 @@ GLint glt::load_cubemap(const std::vector<std::string> &files, int *width, int *
 		stbi_image_free(i);
 	}
 	return tex;
+}
+
+/* 
+ * Information about the image dimensions and channels of a texture so we
+ * can group matching textures into arrays
+ */
+struct TextureInfo {
+	int width, height, channels;
+};
+bool operator<(const TextureInfo &a, const TextureInfo &b){
+	return a.width < b.width || a.height < b.height || a.channels < b.channels;
+}
+std::ostream& operator<<(std::ostream &os, const TextureInfo &t){
+	os << "TextureInfo {\n\twidth = " << t.width
+		<< "\n\theight = " << t.height
+		<< "\n\tchannels = " << t.channels
+		<< "\n}";
+	return os;
+}
+
+struct Texture {
+	TextureInfo info;
+	std::string name;
+	unsigned char *tex;
+};
+
+glt::OBJTextures glt::load_texture_set(const std::set<std::string> &files){
+	OBJTextures obj_textures;
+	std::map<TextureInfo, std::vector<Texture>> unique_textures;
+	for (auto f = ++files.begin(); f != files.end(); ++f){
+		Texture tex;
+		tex.name = *f;
+		tex.tex = stbi_load(f->c_str(), &tex.info.width, &tex.info.height, &tex.info.channels, 0);
+		if (!tex.tex){
+			std::cout << "load_texture_set error loading " << *f
+				<< " - " << stbi_failure_reason() << std::endl;
+			for (auto &u : unique_textures){
+				for (auto &t : u.second){
+					stbi_image_free(t.tex);
+				}
+			}
+			return obj_textures;
+		}
+		// Perform y-swap on loaded images
+		for (int i = 0; i < tex.info.height / 2; ++i){
+			swap_row(&tex.tex[i * tex.info.width * tex.info.channels],
+					&tex.tex[(tex.info.height - i - 1) * tex.info.width * tex.info.channels],
+					tex.info.width * tex.info.channels);
+		}
+		unique_textures[tex.info].push_back(tex);
+	}
+	// Upload each texture array and track where the textures ended up in obj_textures
+	for (const auto &u : unique_textures){
+		std::cout << u.first << "\noccured " << u.second.size() << " times, textures:\n";
+		for (const auto &t : u.second){
+			std::cout << t.name << "\n";
+		}
+		std::cout << "\n";
+		const TextureInfo &info = u.first;
+		GLenum format, sized_format;
+		switch (info.channels){
+			case 1:
+				format = GL_RED;
+				sized_format = GL_R8;
+				break;
+			case 2:
+				format = GL_RG;
+				sized_format = GL_RG8;
+				break;
+			case 3:
+				format = GL_RGB;
+				sized_format = GL_RGB8;
+				break;
+			default:
+				format = GL_RGBA;
+				sized_format = GL_RGBA8;
+				break;
+		}
+		GLuint tex;
+		glGenTextures(1, &tex);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
+		const GLsizei levels = std::log2(std::max(info.width, info.height));
+		glTexStorage3D(GL_TEXTURE_2D_ARRAY, levels, sized_format, info.width, info.height, u.second.size());
+		for (size_t i = 0; i < u.second.size(); ++i){
+			std::cout << "uploading texture " << u.second[i].name << std::endl;
+			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, info.width, info.height,
+					1, format, GL_UNSIGNED_BYTE, u.second[i].tex);
+			obj_textures.tex_map[u.second[i].name] = std::make_pair(tex, i);
+		}
+		glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+		obj_textures.textures.push_back(tex);
+	}
+	for (auto &u : unique_textures){
+		for (auto &t : u.second){
+			stbi_image_free(t.tex);
+		}
+	}
+	return obj_textures;
 }
 
