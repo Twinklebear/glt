@@ -209,7 +209,16 @@ struct TextureInfo {
 	int width, height, channels;
 };
 bool operator<(const TextureInfo &a, const TextureInfo &b){
-	return a.width < b.width || a.height < b.height || a.channels < b.channels;
+	if (a.width == b.width){
+		if (a.height == b.height){
+			if (a.channels == b.channels){
+				return false;
+			}
+			return a.channels < b.channels;
+		}
+		return a.height < b.height;
+	}
+	return a.width < b.width;
 }
 std::ostream& operator<<(std::ostream &os, const TextureInfo &t){
 	os << "TextureInfo {\n\twidth = " << t.width
@@ -228,7 +237,7 @@ struct Texture {
 glt::OBJTextures glt::load_texture_set(const std::set<std::string> &files){
 	OBJTextures obj_textures;
 	std::map<TextureInfo, std::vector<Texture>> unique_textures;
-	for (auto f = ++files.begin(); f != files.end(); ++f){
+	for (auto f = files.begin(); f != files.end(); ++f){
 		Texture tex;
 		tex.name = *f;
 		tex.tex = stbi_load(f->c_str(), &tex.info.width, &tex.info.height, &tex.info.channels, 0);
@@ -252,11 +261,7 @@ glt::OBJTextures glt::load_texture_set(const std::set<std::string> &files){
 	}
 	// Upload each texture array and track where the textures ended up in obj_textures
 	for (const auto &u : unique_textures){
-		std::cout << u.first << "\noccured " << u.second.size() << " times, textures:\n";
-		for (const auto &t : u.second){
-			std::cout << t.name << "\n";
-		}
-		std::cout << "\n";
+		std::cout << u.first << "\noccured " << u.second.size() << " times\n";
 		const TextureInfo &info = u.first;
 		GLenum format, sized_format;
 		switch (info.channels){
@@ -283,10 +288,9 @@ glt::OBJTextures glt::load_texture_set(const std::set<std::string> &files){
 		const GLsizei levels = std::log2(std::max(info.width, info.height));
 		glTexStorage3D(GL_TEXTURE_2D_ARRAY, levels, sized_format, info.width, info.height, u.second.size());
 		for (size_t i = 0; i < u.second.size(); ++i){
-			std::cout << "uploading texture " << u.second[i].name << std::endl;
 			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, info.width, info.height,
 					1, format, GL_UNSIGNED_BYTE, u.second[i].tex);
-			obj_textures.tex_map[u.second[i].name] = std::make_pair(tex, i);
+			obj_textures.tex_map[u.second[i].name] = std::make_pair(obj_textures.textures.size(), i);
 		}
 		glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
 		obj_textures.textures.push_back(tex);
