@@ -134,7 +134,6 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 			std::cout << "\n";
 		}
 	}
-	std::cout << "loaded " << materials.size() << " material(s):\n";
 
 	size_t total_elems = std::accumulate(shapes.begin(), shapes.end(), 0,
 			[](const size_t &cur, const tinyobj::shape_t &s){
@@ -189,6 +188,7 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 	}
 
 	if (!materials.empty()){
+		std::cout << "loaded " << materials.size() << " material(s):\n";
 		std::set<std::string> texture_files;
 		for (const auto &m : materials){
 			if (!m.ambient_texname.empty()){
@@ -279,6 +279,7 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 						break;
 					}
 				}
+				std::cout << "Material " << m.name << " = \n" << mats[i] << "\n";
 			}
 			mat_buf.unmap(GL_SHADER_STORAGE_BUFFER);
 		}
