@@ -261,7 +261,6 @@ glt::OBJTextures glt::load_texture_set(const std::set<std::string> &files){
 	}
 	// Upload each texture array and track where the textures ended up in obj_textures
 	for (const auto &u : unique_textures){
-		std::cout << u.first << "\noccured " << u.second.size() << " times\n";
 		const TextureInfo &info = u.first;
 		GLenum format, sized_format;
 		switch (info.channels){

@@ -223,13 +223,11 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 						GL_MAP_INVALIDATE_RANGE_BIT | GL_MAP_WRITE_BIT));
 			for (size_t i = 0; i < materials.size(); ++i){
 				const auto &m = materials[i];
-				std::cout << "setting up material " << i << " name = " << m.name << std::endl;
 				mats[i].ka = glm::vec4(m.ambient[0], m.ambient[1], m.ambient[2], 1);
 				mats[i].kd = glm::vec4(m.diffuse[0], m.diffuse[1], m.diffuse[2], 1);
 				mats[i].ks = glm::vec4(m.diffuse[0], m.diffuse[1], m.diffuse[2], m.shininess);
 				// Find all the texture information used by this material
 				if (!m.ambient_texname.empty()){
-					std::cout << "ambient full name = " << base_path + m.ambient_texname << "\n";
 					const auto &tex = obj_textures.tex_map[base_path + m.ambient_texname];
 					mats[i].map_ka_kd.x = tex.first;
 					mats[i].map_ka_kd.y = tex.second;
@@ -240,7 +238,6 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 				}
 
 				if (!m.diffuse_texname.empty()){
-					std::cout << "diffuse full name = " << base_path + m.diffuse_texname << "\n";
 					const auto &tex = obj_textures.tex_map[base_path + m.diffuse_texname];
 					mats[i].map_ka_kd.z = tex.first;
 					mats[i].map_ka_kd.w = tex.second;
@@ -251,7 +248,6 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 				}
 
 				if (!m.specular_texname.empty()){
-					std::cout << "specular full name = " << base_path + m.specular_texname << "\n";
 					const auto &tex = obj_textures.tex_map[base_path + m.specular_texname];
 					mats[i].map_ks_n.x = tex.first;
 					mats[i].map_ks_n.y = tex.second;
@@ -262,7 +258,6 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 				}
 
 				if (!m.normal_texname.empty()){
-					std::cout << "normal full name = " << base_path + m.normal_texname << "\n";
 					const auto &tex = obj_textures.tex_map[base_path + m.normal_texname];
 					mats[i].map_ks_n.z = tex.first;
 					mats[i].map_ks_n.w = tex.second;
@@ -276,7 +271,6 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 				mats[i].map_mask = glm::ivec4{-1};
 				for (auto it = m.unknown_parameter.begin(); it != m.unknown_parameter.end(); ++it){
 					if (it->first == "map_d"){
-						std::cout << "alpha_mask full name = " << base_path + it->second << "\n";
 						const auto &tex = obj_textures.tex_map[base_path + it->second];
 						mats[i].map_mask.x = tex.first;
 						mats[i].map_mask.y = tex.second;
@@ -285,8 +279,6 @@ bool glt::load_model_with_mats(const std::string &model_file, BufferAllocator &a
 						break;
 					}
 				}
-				std::cout << "Finished setting " << m.name << " to:\n"
-					<< mats[i] << "\n\n";
 			}
 			mat_buf.unmap(GL_SHADER_STORAGE_BUFFER);
 		}
