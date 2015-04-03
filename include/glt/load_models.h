@@ -74,6 +74,7 @@ bool load_model_with_mats(const std::string &model_file, BufferAllocator &alloca
 		OBJTextures &obj_textures, std::unordered_map<std::string, ModelMatInfo> &model_info);
 }
 std::ostream& operator<<(std::ostream &os, const glt::ModelInfo &m);
+std::ostream& operator<<(std::ostream &os, const glt::ModelMatInfo &m);
 std::ostream& operator<<(std::ostream &os, const glt::Material &m);
 
 #endif

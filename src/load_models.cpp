@@ -293,6 +293,15 @@ std::ostream& operator<<(std::ostream &os, const glt::ModelInfo &m){
 		<< "\n--------\n";
 	return os;
 }
+std::ostream& operator<<(std::ostream &os, const glt::ModelMatInfo &m){
+	os << "glt::ModelMatInfo:"
+		<< "\n\tindex_offset: " << m.index_offset
+		<< "\n\tindices: " << m.indices
+		<< "\n\tvert_offset: " << m.vert_offset
+		<< "\n\tmat_id: " << m.mat_id
+		<< "\n--------\n";
+	return os;
+}
 std::ostream& operator<<(std::ostream &os, const glt::Material &m){
 	os << "Material {\n\tka = " << glm::to_string(m.ka)
 		<< "\n\tkd = " << glm::to_string(m.kd)
