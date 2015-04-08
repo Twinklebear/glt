@@ -63,9 +63,9 @@ void glt::ArcBallCamera::rotate(const SDL_MouseMotionEvent &mouse, float elapsed
 	glm::vec3 mouse_prev_ball = screen_to_arcball(mouse_prev);
 	glm::vec4 rotate_axis = glm::vec4{glm::normalize(glm::cross(mouse_prev_ball, mouse_cur_ball)), 0};
 	// We need to get the rotation axis in world space
-	rotate_axis = glm::inverse(translation * look_at * glm::mat4_cast(rotation)) * rotate_axis;
-	rotation = glm::rotate(rotation, std::acos(glm::dot(mouse_cur_ball, mouse_prev_ball)) * rotation_speed * elapsed,
-			glm::vec3{rotate_axis});
+	rotate_axis = inv_camera * rotate_axis;
+	rotation = glm::rotate(rotation, std::acos(glm::dot(mouse_cur_ball, mouse_prev_ball))
+			* rotation_speed * elapsed, glm::vec3{rotate_axis});
 	rotation = glm::normalize(rotation);
 	camera = translation * look_at * glm::mat4_cast(rotation);
 	inv_camera = glm::inverse(camera);
