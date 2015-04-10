@@ -9,12 +9,15 @@ glt::ArcBallCamera::ArcBallCamera(const glm::mat4 &look_at, float motion_speed, 
 	inv_screen(inv_screen)
 {}
 bool glt::ArcBallCamera::mouse_motion(const SDL_MouseMotionEvent &mouse, float elapsed){
-	if (mouse.state & SDL_BUTTON_LMASK){
+	if (mouse.state & SDL_BUTTON_LMASK && !(SDL_GetModState() & KMOD_CTRL)){
 		rotate(mouse, elapsed);
+		inv_camera = glm::inverse(camera);
 		return true;
 	}
-	else if (mouse.state & SDL_BUTTON_RMASK){
+	else if (mouse.state & SDL_BUTTON_RMASK
+			|| (mouse.state & SDL_BUTTON_LMASK && SDL_GetModState() & KMOD_CTRL)){
 		pan(mouse, elapsed);
+		inv_camera = glm::inverse(camera);
 		return true;
 	}
 	return false;
@@ -68,7 +71,6 @@ void glt::ArcBallCamera::rotate(const SDL_MouseMotionEvent &mouse, float elapsed
 			* rotation_speed * elapsed, glm::vec3{rotate_axis});
 	rotation = glm::normalize(rotation);
 	camera = translation * look_at * glm::mat4_cast(rotation);
-	inv_camera = glm::inverse(camera);
 }
 void glt::ArcBallCamera::pan(const SDL_MouseMotionEvent &mouse, float elapsed){
 	glm::vec3 motion{0.f};
@@ -81,7 +83,6 @@ void glt::ArcBallCamera::pan(const SDL_MouseMotionEvent &mouse, float elapsed){
 	}
 	translation = glm::translate(motion * motion_speed * elapsed) * translation;
 	camera = translation * look_at * glm::mat4_cast(rotation);
-	inv_camera = glm::inverse(camera);
 }
 glm::vec3 glt::screen_to_arcball(const glm::vec2 &p){
 	float dist = glm::dot(p, p);

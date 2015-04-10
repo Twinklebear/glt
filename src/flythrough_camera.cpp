@@ -11,12 +11,13 @@ glt::FlythroughCamera::FlythroughCamera(const glm::mat4 &look_at, float motion_s
 	inv_screen(inv_screen)
 {}
 bool glt::FlythroughCamera::mouse_motion(const SDL_MouseMotionEvent &mouse, float elapsed){
-	if (mouse.state & SDL_BUTTON_LMASK){
+	if (mouse.state & SDL_BUTTON_LMASK && !(SDL_GetModState() & KMOD_CTRL)){
 		rotate(mouse, elapsed);
 		inv_camera = glm::inverse(camera);
 		return true;
 	}
-	else if (mouse.state & SDL_BUTTON_RMASK){
+	else if (mouse.state & SDL_BUTTON_RMASK
+			|| (mouse.state & SDL_BUTTON_LMASK && SDL_GetModState() & KMOD_CTRL)){
 		pan(mouse, elapsed);
 		inv_camera = glm::inverse(camera);
 		return true;
