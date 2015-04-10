@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 #include <glm/ext.hpp>
 #include "glt/flythrough_camera.h"
 
@@ -21,10 +22,11 @@ bool glt::FlythroughCamera::mouse_motion(const SDL_MouseMotionEvent &mouse, floa
 }
 bool glt::FlythroughCamera::mouse_scroll(const SDL_MouseWheelEvent &scroll, float elapsed){
 	if (scroll.y != 0){
-		glm::vec3 motion{0.f};
-		motion.z = scroll.y * 0.35;
+		glm::vec3 motion{glm::normalize(camera * glm::vec4{0, 0, -1, 0})};
+		motion *= scroll.y * 0.35;
+		std::cout << "motion dir = " << glm::to_string(motion) << std::endl;
 		translation = glm::translate(motion * motion_speed * elapsed) * translation;
-		camera = translation * look_at * glm::mat4_cast(rotation);
+		camera = glm::mat4_cast(rotation) * translation * look_at;
 		inv_camera = glm::inverse(camera);
 		return true;
 	}
@@ -50,7 +52,23 @@ glm::vec3 glt::FlythroughCamera::eye_pos() const {
 	return glm::vec3{inv_camera * glm::vec4{0, 0, 0, 1}};
 }
 void glt::FlythroughCamera::rotate(const SDL_MouseMotionEvent &mouse, float elapsed){
-	// TODO!
+	glm::vec3 up{glm::normalize(camera * glm::vec4(0, 1, 0, 0))};
+	glm::vec3 right{glm::normalize(camera * glm::vec4(0, 0, 1, 0))};
+	// Compute current and previous mouse positions in clip space
+	glm::vec2 mouse_cur = glm::vec2{mouse.x * 2.0 * inv_screen[0] - 1.0,
+		1.0 - 2.0 * mouse.y * inv_screen[1]};
+	glm::vec2 mouse_prev = glm::vec2{(mouse.x - mouse.xrel) * 2.0 * inv_screen[0] - 1.0,
+		1.0 - 2.0 * (mouse.y - mouse.yrel) * inv_screen[1]};
+	glm::vec2 delta = mouse_cur - mouse_prev;
+
+	std::cout << "up is " << glm::to_string(up)
+	   << "\nright is " << glm::to_string(right) << "\n\n";
+	const float motion = rotation_speed * elapsed * 0.5;
+	rotation = glm::rotate(rotation, delta.y * motion, right);
+	rotation = glm::rotate(rotation, delta.x * motion, up);
+	rotation = glm::normalize(rotation);
+	camera = glm::mat4_cast(rotation) * translation * look_at;
+	inv_camera = glm::inverse(camera);
 }
 void glt::FlythroughCamera::pan(const SDL_MouseMotionEvent &mouse, float elapsed){
 	glm::vec3 motion{0.f};
@@ -62,7 +80,7 @@ void glt::FlythroughCamera::pan(const SDL_MouseMotionEvent &mouse, float elapsed
 		motion.y = -mouse.yrel * inv_screen[1];
 	}
 	translation = glm::translate(motion * motion_speed * elapsed) * translation;
-	camera = translation * look_at * glm::mat4_cast(rotation);
+	camera = glm::mat4_cast(rotation) * translation * look_at;
 	inv_camera = glm::inverse(camera);
 }
 
