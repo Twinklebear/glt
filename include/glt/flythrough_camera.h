@@ -16,14 +16,13 @@ namespace glt {
  * r key: reset camera to original look_at matrix
  */
 class FlythroughCamera {
-	// We store the unmodified look at matrix along with
-	// decomposed translation and rotation components
-	glm::mat4 look_at, translation;
-	glm::quat rotation;
+	// We store the un-modified look at matrix so we can reset the camera
+	glm::mat4 look_at;
 	// camera is the full camera transform,
 	// inv_camera is stored as well to easily compute
 	// eye position and world space rotation axes
 	glm::mat4 camera, inv_camera;
+	glm::vec3 up, right, dir, pos;
 	// Motion and rotation speeds
 	float motion_speed, rotation_speed;
 	// Inverse x, y window dimensions
